@@ -23,6 +23,7 @@ Aplicativo para achar de forma rápida e fácil a lotação de praias, facilitan
 https://github.com/LCFJunior/BoraPraPraia-PMI-
 
 🛬 _*url landpage:*_
+https://github.com/llucaasbarros/boraprapraia/settings/pages
 
 🤝 _*url Modelo Negócio (imagem):*_
 
