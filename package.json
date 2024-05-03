@@ -1,0 +1,15 @@
+{
+  "name": "boraprapraia",
+  "version": "1.0.0",
+  "description": "-------------------\r Boraprapraia\r -------------------\r 🙁 _*Problema:*_",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
