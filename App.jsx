@@ -13,7 +13,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <View>
-        <StatusBar barStyle={'dark-content'} />
+        <StatusBar translucent backgroundColor="transparent" />
       </View>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="LoginForm" component={LoginForm} options={{ headerShown: false }}/>

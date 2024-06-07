@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Alert, Image, Pressable, SafeAreaView, Switch, Text, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import styles from '../Login/LoginFormStyle';
 
@@ -69,6 +70,10 @@ export default function LoginForm() {
   };
 
   return (
+    <LinearGradient
+    colors={['#e3d4ba', '#fff1e0']}
+    style={styles.container}
+    >
     <SafeAreaView style={styles.container}>
       <Image source={logo} style={styles.image} resizeMode='contain' />
       <Text style={styles.title}>Login</Text>
@@ -124,5 +129,6 @@ export default function LoginForm() {
         <Text style={styles.signup} onPress={() => navigation.navigate('SignUp')}> Cadastrar</Text>
       </Text>
     </SafeAreaView>
+    </LinearGradient>
   );
 }

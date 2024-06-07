@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, TextInput, Button, View , Pressable, Alert, Image, navigation} from 'react-native';
+import { SafeAreaView, Text, TextInput, Button, View, Pressable, Alert, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'react-native-image-picker';
+import { TextInputMask } from 'react-native-masked-text';
 import styles from '../Cadastro/SignUpFormStyle';
 import axios from 'axios';
-import LoginForm from '../Login/LoginForm';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function SignUpForm() {
   const [username, setUsername] = useState("");
@@ -26,21 +27,21 @@ export default function SignUpForm() {
       Alert.alert('Erro', 'As senhas não coincidem!');
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('username', username);
     formData.append('email', email);
     formData.append('telephone', telephone);
     formData.append('password', password);
-  
+
     if (profileImage) {
       formData.append('profileImage', {
         uri: profileImage.uri,
-        type: 'image/jpeg', // Ajuste o tipo conforme necessário
+        type: 'image/jpeg',
         name: profileImage.uri.split('/').pop()
       });
     }
-  
+
     axios
       .post('http://192.168.15.11:5001/SignUpForm', formData, {
         headers: {
@@ -50,8 +51,8 @@ export default function SignUpForm() {
       .then(res => {
         if (res.data.status === "ok") {
           Alert.alert(
-            'Sucesso', 
-            'Cadastro efetuado com sucesso!', 
+            'Sucesso',
+            'Cadastro efetuado com sucesso!',
             [
               { text: 'ok', onPress: () => navigation.navigate('LoginForm') }
             ]
@@ -65,8 +66,7 @@ export default function SignUpForm() {
         Alert.alert('Erro', 'Ocorreu um erro ao cadastrar. Tente novamente.');
       });
   };
-  
-    
+
   const handleChoosePhoto = () => {
     ImagePicker.launchImageLibrary({ noData: true }, (response) => {
       if (response.didCancel) {
@@ -81,68 +81,82 @@ export default function SignUpForm() {
   };
 
   return (
+    <LinearGradient
+    colors={['#e3d4ba', '#fff1e0']}
+    style={styles.container}
+    > 
+    <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
     <SafeAreaView style={styles.container}>
-        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Image source={backButton} style={styles.backButtonImage} />
-        </Pressable>
+        {/* <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>  */}
+          {/* <Image source={backButton} style={styles.backButtonImage} /> */}
+        {/* </Pressable> */}
         <Pressable onPress={handleChoosePhoto}>
-            {profileImage ? (
-                <Image source={profileImage} style={styles.profileImage} />
-            ) : (
-                <View style={styles.profilePlaceholder}>
-                    <Text style={styles.profilePlaceholderText}>SELECIONAR IMAGEM</Text>
-                </View>
-            )}
+          {profileImage ? (
+            <Image source={profileImage} style={styles.profileImage} />
+          ) : (
+            <View style={styles.profilePlaceholder}>
+              <Text style={styles.profilePlaceholderText}>IMAGEM</Text>
+            </View>
+          )}
         </Pressable>
-        <Text style={styles.titleCadastro}>Cadastro</Text>
         <View style={styles.inputViewCadastrar}>
-            <TextInput
-                style={styles.inputCadastro}
-                placeholder='NOME DE USUÁRIO'
-                value={username}
-                onChangeText={setUsername}
-                autoCorrect={false}
-                autoCapitalize='none'
-            />
-            <TextInput
-                style={styles.inputCadastro}
-                placeholder='EMAIL'
-                value={email}
-                onChangeText={setEmail}
-                autoCorrect={false}
-                autoCapitalize='none'
-            />
-            <TextInput
-                style={styles.inputCadastro}
-                placeholder='TELEFONE'
-                value={telephone}
-                onChangeText={setTelephone}
-                autoCorrect={false}
-                autoCapitalize='none'
-            />
-            <TextInput
-                style={styles.inputCadastro}
-                placeholder='SENHA'
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-                autoCorrect={false}
-                autoCapitalize='none'
-            />
-            <TextInput
-                style={styles.inputCadastro}
-                placeholder='CONFIRMAR SENHA'
-                secureTextEntry
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                autoCorrect={false}
-                autoCapitalize='none'
-            />
+          <Text style={styles.inputLabel}>Usuário</Text>
+          <TextInput
+            style={styles.inputCadastro}
+            placeholder='joaozin123'
+            value={username}
+            onChangeText={setUsername}
+            autoCorrect={false}
+            autoCapitalize='none'
+          />
+          <Text style={styles.inputLabel}>Email</Text>
+          <TextInput
+            style={styles.inputCadastro}
+            placeholder='joaozin@gmail.com'
+            value={email}
+            onChangeText={setEmail}
+            autoCorrect={false}
+            autoCapitalize='none'
+          />
+          <Text style={styles.inputLabel}>Telefone</Text>
+          <TextInputMask
+            type={'cel-phone'}
+            options={{
+              maskType: 'BRL',
+              withDDD: true,
+              dddMask: '(99) '
+            }}
+            style={styles.inputCadastro}
+            placeholder='(48) 91234-5678'
+            value={telephone}
+            onChangeText={setTelephone}
+          />
+          <Text style={styles.inputLabel}>Senha</Text>
+          <TextInput
+            style={styles.inputCadastro}
+            placeholder='********'
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+            autoCorrect={false}
+            autoCapitalize='none'
+          />
+          <Text style={styles.inputLabel}>Confirmar Senha</Text>
+          <TextInput
+            style={styles.inputCadastro}
+            placeholder='********'
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            autoCorrect={false}
+            autoCapitalize='none'
+          />
         </View>
         <Pressable style={styles.buttomCadastrar} onPress={() => handleSubmit("Cadastro efetuado com sucesso!")}>
-            <Text style={styles.buttonText}>CADASTRAR</Text>
+          <Text style={styles.buttonText}>CADASTRAR</Text>
         </Pressable>
     </SafeAreaView>
+    </ScrollView>
+    </LinearGradient>
   );
 }
-
