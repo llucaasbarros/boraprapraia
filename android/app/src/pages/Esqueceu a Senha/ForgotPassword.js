@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView, Text, TextInput, Button, View , Pressable, Alert, Image, navigation} from 'react-native';
+import {
+    SafeAreaView,
+    Text,
+    TextInput,
+    Pressable,
+    Alert,
+    Image
+} from 'react-native';
 import styles from '../Esqueceu a Senha/ForgotPasswordStyle';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -19,7 +26,7 @@ export default function ForgotPassword() {
         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
             <Image source={backButton} style={styles.backButtonImage} />
         </Pressable>
-        <Text style={styles.title}>Redefinir Senha</Text>
+            <Text style={styles.title}>Redefinir Senha</Text>
         <TextInput
             style={styles.input}
             placeholder='Digite seu e-mail'

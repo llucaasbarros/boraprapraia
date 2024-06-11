@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
   },
   centerButton: {
     position: 'absolute',
-    top: 6,
-    right: 6,
+    top: 20,
+    right: 15,
     width: 50,
     height: 50,
     borderRadius: 20,
@@ -71,6 +71,45 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
+  config: {
+    backgroundColor : "#FFA825",
+      position: 'absolute',
+      bottom: 300,
+      height : 45,
+      width : 50,
+      borderColor : "white",
+      borderWidth  : 1,
+      borderRadius : 5,
+      alignItems : "center",
+      justifyContent : "center",
+      left: 5
+    },
+    containerMenu: {
+      alignItems: 'center',
+      position: 'absolute'
+    },
+    button: {
+      position: 'absolute',
+      width: 60,
+      height: 60,
+      borderRadius: 60 / 2,
+      justifyContent: 'center',
+      shadowRadius: 10,
+      shadowColor: '#00213B',
+      shadowOpacity: 0.3,
+      shadowOffset: {
+        height: 10,
+      }
+    },
+    menu: {
+      backgroundColor: "#00213B"
+    },
+    submenu: {
+      width: 48,
+      height: 48,
+      borderRadius: 48 / 2,
+      backgroundColor: '#00213B'
+    }
 });
 
 export default styles;

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 
 const styles = StyleSheet.create({
     
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
       width: 150,
       height: 150,
       borderRadius: 100,
-      backgroundColor: '#ded3c1',
+      backgroundColor: 'white',
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 35,
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
       width: 150,
       height: 150,
       borderRadius: 100,
-      backgroundColor: '#ded3c1',
+      backgroundColor: 'white',
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 35,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
       borderWidth : 3,
     },
     profilePlaceholderText: {
-      color: "#FFFFFF",
+      color: "#FFA825",
       textAlign: 'center',
     },
     title : {
@@ -76,15 +76,25 @@ const styles = StyleSheet.create({
     },
     backButton : {
       position: 'absolute',
-      top: 40,
-      left: 25,
+      top: 47,
+      left: 15,
       zIndex: 1,
       height : 45,
       width : 45,
     },
     backButtonImage : {
-      width: 65,
-      height: 65,
+      width: 35,
+      height: 35,
+    },
+    passwordContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+    },
+    iconContainer: {
+      padding: 10,
+      position: 'absolute',
+      right: 5
     },
     inputCadastro : {
       height : 50,
@@ -105,7 +115,18 @@ const styles = StyleSheet.create({
       paddingHorizontal : 40,
       marginBottom  : 25,
       marginTop: -20
-    }
+    },
+    inputError: {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+    warningIcon: {
+      position: 'absolute',
+      right: 52,
+      top: '32%',
+      transform: [{ translateY: -10 }],
+      zIndex: 1
+    },    
   })
 
 export default styles;

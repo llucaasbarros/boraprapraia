@@ -1,26 +1,39 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, TextInput, Button, View, Pressable, Alert, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { 
+  SafeAreaView,
+  Text,
+  TextInput, 
+  View,
+  Pressable,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  TouchableOpacity
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'react-native-image-picker';
 import { TextInputMask } from 'react-native-masked-text';
 import styles from '../Cadastro/SignUpFormStyle';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function SignUpForm() {
   const [username, setUsername] = useState("");
-  const [usernameVerify, setUsernameVerify] = useState(false);
   const [password, setPassword] = useState("");
-  const [passwordVerify, setPasswordVerify] = useState(false);
   const [email, setEmail] = useState("");
-  const [emailVerify, setEmailVerify] = useState(false);
   const [telephone, setTelephone] = useState("");
-  const [telephoneVerify, setTelephoneVerify] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmPasswordVerify, setConfirmPasswordVerify] = useState(false);
   const backButton = require('../../../../../assets/back-button.png');
   const navigation = useNavigation();
   const [profileImage, setProfileImage] = useState(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(true);
+  const [buttonText, setButtonText] = useState("CADASTRAR");
+  const [emailBorderClass, setEmailBorderClass] = useState('');
+  const [showWarningIcon, setShowWarningIcon] = useState(false);
 
   const handleSubmit = () => {
     if (password !== confirmPassword) {
@@ -50,13 +63,10 @@ export default function SignUpForm() {
       })
       .then(res => {
         if (res.data.status === "ok") {
-          Alert.alert(
-            'Sucesso',
-            'Cadastro efetuado com sucesso!',
-            [
-              { text: 'ok', onPress: () => navigation.navigate('LoginForm') }
-            ]
-          );
+          setButtonText("Cadastro Efetuado!");
+          setTimeout(() => {
+            navigation.navigate('LoginForm');
+          }, 1000);
         } else {
           Alert.alert('Erro', 'Usuário já existente!');
         }
@@ -80,83 +90,114 @@ export default function SignUpForm() {
     });
   };
 
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+  };
+
   return (
     <LinearGradient
-    colors={['#e3d4ba', '#fff1e0']}
-    style={styles.container}
-    > 
-    <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
-    <SafeAreaView style={styles.container}>
-        {/* <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>  */}
-          {/* <Image source={backButton} style={styles.backButtonImage} /> */}
-        {/* </Pressable> */}
-        <Pressable onPress={handleChoosePhoto}>
-          {profileImage ? (
-            <Image source={profileImage} style={styles.profileImage} />
-          ) : (
-            <View style={styles.profilePlaceholder}>
-              <Text style={styles.profilePlaceholderText}>IMAGEM</Text>
+      colors={['#e3d4ba', '#fff1e0']}
+      style={styles.container}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "android" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <ScrollView style={styles.scrollView}>
+          <SafeAreaView style={styles.container}>
+            <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+              <Image source={backButton} style={styles.backButtonImage} />
+            </Pressable>
+            <Pressable onPress={handleChoosePhoto}>
+              {profileImage ? (
+                <Image source={profileImage} style={styles.profileImage} />
+              ) : (
+                <View style={styles.profilePlaceholder}>
+                  <Text style={styles.profilePlaceholderText}>IMAGEM</Text>
+                </View>
+              )}
+            </Pressable>
+            <View style={styles.inputViewCadastrar}>
+              <Text style={styles.inputLabel}>Usuário</Text>
+              <TextInput
+                style={styles.inputCadastro}
+                placeholder='ex: joaozin123'
+                value={username}
+                onChangeText={setUsername}
+                autoCorrect={false}
+                autoCapitalize='none'
+              />
+              <Text style={styles.inputLabel}>Email</Text>
+              <TextInput
+                style={[styles.inputCadastro, emailBorderClass]}
+                placeholder='ex: joaozin@gmail.com'
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  const hasError = !text.includes('@');
+                  setEmailBorderClass(hasError ? styles.inputError : '');
+                  setShowWarningIcon(hasError);
+                }}
+                autoCorrect={false}
+                autoCapitalize='none'
+              />
+              {showWarningIcon && (
+                <Icon name="exclamation-circle" size={20} color="red" style={styles.warningIcon} />
+              )}
+              <Text style={styles.inputLabel}>Telefone</Text>
+              <TextInputMask
+                type={'cel-phone'}
+                options={{
+                  maskType: 'BRL',
+                  withDDD: true,
+                  dddMask: '(99)'
+                }}
+                style={styles.inputCadastro}
+                placeholder='ex: (48)91234-5678'
+                value={telephone}
+                onChangeText={setTelephone}
+              />
+              <Text style={styles.inputLabel}>Senha</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.inputCadastro}
+                  placeholder='********'
+                  secureTextEntry={isPasswordVisible}
+                  value={password}
+                  onChangeText={setPassword}
+                  autoCorrect={false}
+                  autoCapitalize='none'
+                />
+                <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
+                  <Icon name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.inputLabel}>Confirmar Senha</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.inputCadastro}
+                  placeholder='********'
+                  secureTextEntry={isConfirmPasswordVisible}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  autoCorrect={false}
+                  autoCapitalize='none'
+                />
+                <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.iconContainer}>
+                  <Icon name={isConfirmPasswordVisible ? 'eye-slash' : 'eye'} size={20} />
+                </TouchableOpacity>
+              </View>
             </View>
-          )}
-        </Pressable>
-        <View style={styles.inputViewCadastrar}>
-          <Text style={styles.inputLabel}>Usuário</Text>
-          <TextInput
-            style={styles.inputCadastro}
-            placeholder='joaozin123'
-            value={username}
-            onChangeText={setUsername}
-            autoCorrect={false}
-            autoCapitalize='none'
-          />
-          <Text style={styles.inputLabel}>Email</Text>
-          <TextInput
-            style={styles.inputCadastro}
-            placeholder='joaozin@gmail.com'
-            value={email}
-            onChangeText={setEmail}
-            autoCorrect={false}
-            autoCapitalize='none'
-          />
-          <Text style={styles.inputLabel}>Telefone</Text>
-          <TextInputMask
-            type={'cel-phone'}
-            options={{
-              maskType: 'BRL',
-              withDDD: true,
-              dddMask: '(99) '
-            }}
-            style={styles.inputCadastro}
-            placeholder='(48) 91234-5678'
-            value={telephone}
-            onChangeText={setTelephone}
-          />
-          <Text style={styles.inputLabel}>Senha</Text>
-          <TextInput
-            style={styles.inputCadastro}
-            placeholder='********'
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            autoCorrect={false}
-            autoCapitalize='none'
-          />
-          <Text style={styles.inputLabel}>Confirmar Senha</Text>
-          <TextInput
-            style={styles.inputCadastro}
-            placeholder='********'
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            autoCorrect={false}
-            autoCapitalize='none'
-          />
-        </View>
-        <Pressable style={styles.buttomCadastrar} onPress={() => handleSubmit("Cadastro efetuado com sucesso!")}>
-          <Text style={styles.buttonText}>CADASTRAR</Text>
-        </Pressable>
-    </SafeAreaView>
-    </ScrollView>
+            <Pressable style={styles.buttomCadastrar} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>{buttonText}</Text>
+            </Pressable>
+          </SafeAreaView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }

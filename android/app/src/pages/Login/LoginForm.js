@@ -1,10 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, Image, Pressable, SafeAreaView, Switch, Text, TextInput, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, {
+  useState,
+  useEffect
+} from 'react';
+import {
+  Alert,
+  Image,
+  Pressable,
+  SafeAreaView,
+  Switch,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity
+} from 'react-native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import styles from '../Login/LoginFormStyle';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const logo = require("../../../../../assets/logo.png");
 const facebook = require("../../../../../assets/facebook.png");
@@ -13,42 +27,53 @@ const x = require("../../../../../assets/x.png");
 
 export default function LoginForm() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [rememberMe, setRememberMe] = useState(false);
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [loginError, setLoginError] = useState(false);
+  const [buttonText, setButtonText] = useState("LOGIN");
+
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
   const handleSubmit = () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password');
+      Alert.alert('Error', 'Por favor, preencha todos os campos!');
       return;
     }
-
+  
     setLoading(true);
     console.log(email, password);
     const userData = {
       email: email,
       password: password,
     };
-
+  
     axios.post('http://192.168.15.11:5001/LoginForm', userData)
       .then(res => {
         console.log(res.data);
         if (res.data.status === 'ok') {
-          Alert.alert('Logged In Successfully');
           AsyncStorage.setItem('token', res.data.data);
           AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
           AsyncStorage.setItem('userType', res.data.userType);
-          navigation.navigate('Home');
+          setTimeout(() => {
+            navigation.navigate('Home');
+          }, 1000);
+          setButtonText("LOGIN EFETUADO! 😀");
         } else {
-          Alert.alert('Login Failed', 'Invalid email or password');
+          Alert.alert('Login Failed', 'Email ou senha inválidos!');
           setPassword('');
+          setLoginError(true);
         }
       })
       .catch(error => {
         console.error(error);
-        Alert.alert('An error occurred', 'Please try again later.');
+        Alert.alert('Ocorreu um erro,', 'por favor, tente novamente mais tarde!');
       })
       .finally(() => {
         setLoading(false);
@@ -63,7 +88,10 @@ export default function LoginForm() {
   useEffect(() => {
     getData();
     console.log("Hii");
-  }, []);
+    setPassword('')
+    setEmail('')
+    setButtonText('LOGIN')
+  }, [isFocused]);;
 
   const handleRememberMeToggle = () => {
     setRememberMe(previousState => !previousState);
@@ -76,25 +104,28 @@ export default function LoginForm() {
     >
     <SafeAreaView style={styles.container}>
       <Image source={logo} style={styles.image} resizeMode='contain' />
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>BEM VINDO!</Text>
       <View style={styles.inputView}>
         <TextInput
           style={styles.input}
-          placeholder='EMAIL OU USUÁRIO'
+          placeholder='EMAIL'
           value={email}
           onChange={e => setEmail(e.nativeEvent.text)}
           autoCorrect={false}
           autoCapitalize='none'
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, loginError && styles.inputError]}
           placeholder='SENHA'
-          secureTextEntry
+          secureTextEntry={isPasswordVisible}
           value={password}
-          onChange={e => setPassword(e.nativeEvent.text)}
+          onChangeText={(text) => { setPassword(text); setLoginError(false); }}
           autoCorrect={false}
           autoCapitalize='none'
         />
+        <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
+          <Icon name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} />
+        </TouchableOpacity>
       </View>
       <View style={styles.rememberView}>
         <View style={styles.switch}>
@@ -109,9 +140,9 @@ export default function LoginForm() {
       </View>
       <View style={styles.buttonView}>
         <Pressable style={styles.button} onPress={handleSubmit} disabled={loading}>
-          <Text style={styles.buttonText}>{loading ? 'LOADING...' : 'LOGIN'}</Text>
+          <Text style={styles.buttonText}>{buttonText}</Text>
         </Pressable>
-        <Text style={styles.optionsText}>OU LOGIN COM</Text>
+        <Text style={styles.optionsText}>--------------------   OU   --------------------</Text>
       </View>
       <View style={styles.mediaIcons}>
         <Pressable onPress={() => Alert.alert("Login com Facebook")}>

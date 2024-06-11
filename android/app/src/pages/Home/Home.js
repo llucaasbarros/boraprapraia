@@ -1,10 +1,20 @@
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { View, Dimensions, Platform, PermissionsAndroid, Image, Pressable } from 'react-native';
+import {
+  View,
+  Dimensions,
+  Platform,
+  PermissionsAndroid,
+  Text,
+  Pressable,
+  TouchableWithoutFeedback,
+  Animated
+} from 'react-native';
 import styles from './HomeStyle';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useRef } from 'react';
 import Geolocation from '@react-native-community/geolocation';
 import mapStyle from '../../../../../assets/MapStyle.json';
-import * as Animatable from 'react-native-animatable';
+import FabButton from '../../../../../Components/FabButton';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -24,8 +34,8 @@ const BOUNDARIES = {
 
 export default function Home() {
   const [region, setRegion] = useState(HOME_REGION);
-  const [showMenu, setShowMenu] = useState(false); // State para controlar a exibição do menu
   const mapRef = useRef(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     getMyLocation();
@@ -59,7 +69,6 @@ export default function Home() {
     if (isWithinBoundaries(newRegion.latitude, newRegion.longitude)) {
       setRegion(newRegion);
     } else {
-
       let adjustedRegion = { ...newRegion };
       if (newRegion.latitude > BOUNDARIES.north) {
         adjustedRegion.latitude = BOUNDARIES.north;
@@ -76,10 +85,6 @@ export default function Home() {
       setRegion(adjustedRegion);
       mapRef.current.animateToRegion(adjustedRegion, 1000);
     }
-  }
-
-  function handleMenuPress() {
-    setShowMenu(!showMenu); // Alterna a exibição do menu ao pressionar o botão
   }
 
   return (
@@ -106,25 +111,10 @@ export default function Home() {
           }
         }}
       />
-      <Pressable
-        style={styles.button}
-        onPress={handleMenuPress} // Altere para a função que controla a exibição do menu
-      >
-        <Animatable.View style={styles.shapesContainer} animation={showMenu ? 'slideOutUp' : 'slideInDown'}>
-          <Animatable.View style={styles.circle} animation={showMenu} />
-          <Animatable.View style={styles.square} animation={showMenu} />
-          <Animatable.View style={styles.triangle} animation={showMenu} />
-        </Animatable.View>
+      <Pressable style={styles.config} onPress={() => navigation.navigate('Config')}>
+        <Text>a</Text>
       </Pressable>
-      <Pressable
-        style={styles.centerButton}
-        onPress={getMyLocation}
-      >
-        <Image
-          source={require('../../../../../assets/center.png')}
-          style={styles.centerIcon}
-        />
-      </Pressable>
+      <FabButton />
     </View>
   );
 }

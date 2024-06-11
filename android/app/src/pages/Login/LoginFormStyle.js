@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
       paddingTop : 45,
       justifyContent : 'center',
       marginTop : 0 ,
-      height: 770
+      height: 770,
     },
     image : {
       height : 160,
@@ -21,6 +21,9 @@ const styles = StyleSheet.create({
       paddingVertical : 40,
       color : "#FFA825"
     },
+    inputError: {
+      borderColor: 'red',
+    },    
     inputView : {
       gap : 15,
       width : "100%",
@@ -71,6 +74,17 @@ const styles = StyleSheet.create({
       alignItems : "center",
       justifyContent : "center",
       marginTop: 20
+    },
+    passwordContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+    },
+    iconContainer: {
+      padding: 10,
+      position: 'absolute',
+      right: 43,
+      bottom: 6
     },
     buttonText : {
       color : "white"  ,

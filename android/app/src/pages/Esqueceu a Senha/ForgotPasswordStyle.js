@@ -9,18 +9,18 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff1e0'
     },
     title: {
-        fontSize : 30,
-        fontWeight : "bold",
-        textTransform : "uppercase",
-        textAlign: "center",
-        paddingVertical : 40,
-        color : "#FFA825"
+      fontSize : 30,
+      fontWeight : "bold",
+      textTransform : "uppercase",
+      textAlign: "center",
+      paddingVertical : 40,
+      color : "#FFA825"
     },
     input: {
       width: '100%',
       padding: 8,
       borderWidth: 1,
-      borderColor: '#ccc',
+      borderColor: '#FFA825',
       borderRadius: 4,
       marginBottom: 0,
       marginTop : -15,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         backgroundColor : "#FFA825",
         height : 45,
         width : 290,
-        borderColor : "gray",
+        borderColor : "white",
         borderWidth  : 1,
         borderRadius : 5,
         alignItems : "center",
@@ -43,17 +43,17 @@ const styles = StyleSheet.create({
         fontWeight : "bold"
     },
     backButton : {
-        position: 'absolute',
-        top: 0,
-        left: 10,
-        zIndex: 1,
-        height : 45,
-        width : 45,
-      },
+      position: 'absolute',
+      top: 47,
+      left: 15,
+      zIndex: 1,
+      height : 45,
+      width : 45,
+    },
     backButtonImage : {
-        width: 65,
-        height: 65,
-    }, 
+      width: 35,
+      height: 35,
+    },
   });
 
 
