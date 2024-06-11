@@ -114,7 +114,6 @@ export default function Home() {
       <Pressable style={styles.config} onPress={() => navigation.navigate('Config')}>
         <Text>a</Text>
       </Pressable>
-      <FabButton />
     </View>
   );
 }
