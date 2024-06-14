@@ -1,20 +1,21 @@
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  Fragment
+} from 'react';
 import {
   View,
   Dimensions,
   Platform,
-  PermissionsAndroid,
-  Text,
-  Pressable,
-  TouchableWithoutFeedback,
-  Animated
+  PermissionsAndroid
 } from 'react-native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import styles from './HomeStyle';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, useRef } from 'react';
 import Geolocation from '@react-native-community/geolocation';
 import mapStyle from '../../../../../assets/MapStyle.json';
-import FabButton from '../../../../../Components/FabButton';
+import FabButton from '../../Components/FabButton';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -87,6 +88,10 @@ export default function Home() {
     }
   }
 
+  function navigateToConfig() {
+    navigation.navigate('Config');
+  }
+
   return (
     <View style={styles.container}>
       <MapView
@@ -111,10 +116,9 @@ export default function Home() {
           }
         }}
       />
-      <Pressable style={styles.config} onPress={() => navigation.navigate('Config')}>
-        <Text>a</Text>
-      </Pressable>
-      <FabButton />
+      <Fragment>
+        <FabButton navigateToConfig={navigateToConfig} />
+      </Fragment>
     </View>
   );
 }

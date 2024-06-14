@@ -7,7 +7,7 @@ import Home from './android/app/src/pages/Home/Home';
 import ForgotPassword from './android/app/src/pages/Esqueceu a Senha/ForgotPassword';
 import Config from './android/app/src/pages/Config/Config'
 import { StatusBar, View } from 'react-native';
-import FabButton from './Components/FabButton';
+import FabButton from './android/app/src/Components/FabButton';
 
 const Stack = createNativeStackNavigator();
 

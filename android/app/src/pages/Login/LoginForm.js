@@ -104,7 +104,7 @@ export default function LoginForm() {
     >
     <SafeAreaView style={styles.container}>
       <Image source={logo} style={styles.image} resizeMode='contain' />
-      <Text style={styles.title}>BEM VINDO!</Text>
+      <Text style={styles.title}>BEM VINDO(a)!</Text>
       <View style={styles.inputView}>
         <TextInput
           style={styles.input}
@@ -123,13 +123,18 @@ export default function LoginForm() {
           autoCorrect={false}
           autoCapitalize='none'
         />
-        <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
+        <TouchableOpacity
+        onPress={togglePasswordVisibility}
+        style={styles.iconContainer}>
           <Icon name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} />
         </TouchableOpacity>
       </View>
       <View style={styles.rememberView}>
         <View style={styles.switch}>
-          <Switch value={rememberMe} onValueChange={handleRememberMeToggle} trackColor={{ true: "green", false: "gray" }} />
+          <Switch
+          value={rememberMe}
+          onValueChange={handleRememberMeToggle}
+          style={{ transform: [{ scaleX: 0.95 }, { scaleY: 0.95 }] }}/>
           <Text style={styles.rememberText}>Lembrar de Mim</Text>
         </View>
         <View>

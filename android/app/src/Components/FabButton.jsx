@@ -1,29 +1,34 @@
 import React, { Component } from "react";
-import { View, StyleSheet, TouchableWithoutFeedback, Animated} from "react-native";
-import {AntDesign, Entypo, FontAwesome} from '@expo/vector-icons'
+import { View, StyleSheet, TouchableWithoutFeedback, Animated, Text } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class FabButton extends Component {
-
-    animation = new Animated.Value(0)
-
-    toggleMenu = () => {
-        const toValue = this.open ? 0 : 1
-
-        Animated.spring(this.animation, {
-            toValue,
-            friction: 5,
-        }).start();
-
-        this.open = !this.open;
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            animation: new Animated.Value(0)
+        };
     }
 
-    render(){
-        
+    toggleMenu = () => {
+        const toValue = this.state.open ? 0 : 1;
+
+        Animated.spring(this.state.animation, {
+            toValue,
+            friction: 6,
+            useNativeDriver: true
+        }).start();
+
+        this.setState({ open: !this.state.open });
+    }
+
+    render() {
         const cameraStyle = {
             transform: [
-                { scale: this.animation},
+                { scale: this.state.animation },
                 {
-                    translateY: this.animation.interpolate({
+                    translateY: this.state.animation.interpolate({
                         inputRange: [0, 1],
                         outputRange: [0, -70]
                     })
@@ -33,9 +38,9 @@ export default class FabButton extends Component {
 
         const likeStyle = {
             transform: [
-                { scale: this.animation},
+                { scale: this.state.animation },
                 {
-                    translateY: this.animation.interpolate({
+                    translateY: this.state.animation.interpolate({
                         inputRange: [0, 1],
                         outputRange: [0, -130]
                     })
@@ -46,7 +51,7 @@ export default class FabButton extends Component {
         const rotation = {
             transform: [
                 {
-                    rotate: this.animation.interpolate({
+                    rotate: this.state.animation.interpolate({
                         inputRange: [0, 1],
                         outputRange: ['0deg', '45deg']
                     })
@@ -54,36 +59,44 @@ export default class FabButton extends Component {
             ]
         }
 
-        return(
+        return (
             <View style={[styles.container, this.props.style]}>
                 <TouchableWithoutFeedback>
                     <Animated.View style={[styles.button, styles.submenu, likeStyle]}>
-                        <Entypo name='star' size={20} color='FFF' />
+                        <Text style={styles.iconText}>
+                            <Icon name='star' size={20} color='#FFF' />
+                        </Text>
                     </Animated.View>
                 </TouchableWithoutFeedback>
 
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={this.props.navigateToConfig}>
                     <Animated.View style={[styles.button, styles.submenu, cameraStyle]}>
-                        <FontAwesome name='gear' size={20} color='FFF' />
+                        <Text style={styles.iconText}>
+                            <Icon name='gear' size={20} color='#FFF' />
+                        </Text>
                     </Animated.View>
                 </TouchableWithoutFeedback>
 
                 <TouchableWithoutFeedback onPress={this.toggleMenu}>
                     <Animated.View style={[styles.button, styles.menu, rotation]}>
-                        <AntDesign name='plus' size={24} color='FFF' />
+                        <Text style={styles.iconText}>
+                            <Icon name='plus' size={24} color='#FFF' />
+                        </Text>
                     </Animated.View>
                 </TouchableWithoutFeedback>
             </View>
-        )
+        );
     }
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         alignItems: 'center',
-        position: 'absolute'
+        position: 'absolute',
+        bottom: 90,
+        left: 60
     },
-    button:{
+    button: {
         position: 'absolute',
         width: 60,
         height: 60,
@@ -94,15 +107,18 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowOffset: {
             height: 10,
-        }
+        },
     },
-    menu:{
-        backgroundColor: "#00213B"
+    menu: {
+        backgroundColor: "#FFA825"
     },
-    submenu:{
+    submenu: {
         width: 48,
         height: 48,
         borderRadius: 48 / 2,
-        backgroundColor: '#00213B'
+        backgroundColor: '#FFA825'
+    },
+    iconText: {
+        textAlign: 'center'
     }
-})
+});
