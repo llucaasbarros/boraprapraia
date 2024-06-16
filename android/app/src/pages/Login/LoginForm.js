@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useEffect
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Alert,
   Image,
@@ -36,7 +33,6 @@ export default function LoginForm() {
   const [loginError, setLoginError] = useState(false);
   const [buttonText, setButtonText] = useState("LOGIN");
 
-
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -60,7 +56,11 @@ export default function LoginForm() {
         if (res.data.status === 'ok') {
           AsyncStorage.setItem('token', res.data.data);
           AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
-          AsyncStorage.setItem('userType', res.data.userType);
+          if (res.data.userType) {
+            AsyncStorage.setItem('userType', res.data.userType);
+          } else {
+            AsyncStorage.removeItem('userType');
+          }
           setTimeout(() => {
             navigation.navigate('Home');
           }, 1000);
@@ -88,10 +88,10 @@ export default function LoginForm() {
   useEffect(() => {
     getData();
     console.log("Hii");
-    setPassword('')
-    setEmail('')
-    setButtonText('LOGIN')
-  }, [isFocused]);;
+    setPassword('');
+    setEmail('');
+    setButtonText('LOGIN');
+  }, [isFocused]);
 
   const handleRememberMeToggle = () => {
     setRememberMe(previousState => !previousState);
@@ -115,7 +115,7 @@ export default function LoginForm() {
           autoCapitalize='none'
         />
         <TextInput
-          style={[styles.input, loginError && styles.inputError]}
+          style={[styles.input, loginError && styles.inputError, {paddingRight: 45}]}
           placeholder='SENHA'
           secureTextEntry={isPasswordVisible}
           value={password}

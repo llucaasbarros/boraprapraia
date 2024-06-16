@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
       paddingTop : 0,
       justifyContent : 'center',
       marginTop : 0 ,
-      height: 770
+
     },
     scrollView : {
       flex : 1
@@ -19,8 +19,12 @@ const styles = StyleSheet.create({
       marginTop: 2,
     },
     image : {
-      height : 160,
-      width : 170
+      height : 150,
+      width : 150
+    },
+    defaultImage: {
+      height: 150,
+      width: 150
     },
     profileImage: {
       width: 150,
@@ -30,7 +34,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 35,
-      marginTop : 20,
+      marginTop : 55,
       borderColor : "#FFA825",
       borderWidth : 3,
     },
@@ -42,13 +46,9 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 35,
-      marginTop : 20,
+      marginTop : 55,
       borderColor : "#FFA825",
       borderWidth : 3,
-    },
-    profilePlaceholderText: {
-      color: "#FFA825",
-      textAlign: 'center',
     },
     title : {
       fontSize : 30,

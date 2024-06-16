@@ -6,8 +6,9 @@ import SignUpForm from './android/app/src/pages/Cadastro/SignUpForm';
 import Home from './android/app/src/pages/Home/Home';
 import ForgotPassword from './android/app/src/pages/Esqueceu a Senha/ForgotPassword';
 import Config from './android/app/src/pages/Config/Config'
+import EditProfile from './android/app/src/pages/EditProfile/EditProfile';
 import { StatusBar, View } from 'react-native';
-import FabButton from './android/app/src/Components/FabButton';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
         <Stack.Screen name="Config" component={Config} options={{ headerShown: false }}/>
+        <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
 )}

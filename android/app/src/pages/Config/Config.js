@@ -84,7 +84,7 @@ export default function Config() {
               <Text style={styles.sectionTitle}>Conta</Text>
               <View style={styles.sectionBody}>
                 <Pressable
-                  onPress={() => { }}
+                  onPress={() => navigation.navigate('EditProfile')}
                   style={styles.profile}
                 >
                   <Image

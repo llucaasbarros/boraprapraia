@@ -116,15 +116,9 @@ export default function Home() {
           }
         }}
       />
-<<<<<<< HEAD
       <Fragment>
         <FabButton navigateToConfig={navigateToConfig} />
       </Fragment>
-=======
-      <Pressable style={styles.config} onPress={() => navigation.navigate('Config')}>
-        <Text>a</Text>
-      </Pressable>
->>>>>>> 5009f8b1c65ecb46ff6f427e9ab22de671fd42be
     </View>
   );
 }

@@ -1,47 +1,66 @@
-import React, { useState } from 'react';
-import { 
+import React, { useState, useEffect } from 'react';
+import {
   SafeAreaView,
-  Text,
-  TextInput, 
   View,
-  Pressable,
+  TextInput,
+  Text,
+  ScrollView,
   Alert,
+  Pressable,
   Image,
   KeyboardAvoidingView,
-  ScrollView,
-  Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import * as ImagePicker from 'react-native-image-picker';
-import { TextInputMask } from 'react-native-masked-text';
-import styles from '../Cadastro/SignUpFormStyle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import styles from './EditProfileStyle';
 import LinearGradient from 'react-native-linear-gradient';
+import * as ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function SignUpForm() {
+export default function EditProfile() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const backButton = require('../../../../../assets/back-button.png');
-  const defaultProfileImage = require('../../../../../assets/Profile-pick.png');
-  const navigation = useNavigation();
   const [profileImage, setProfileImage] = useState(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(true);
-  const [buttonText, setButtonText] = useState("CADASTRAR");
-  const [emailBorderClass, setEmailBorderClass] = useState('');
-  const [showWarningIcon, setShowWarningIcon] = useState(false);
+  const navigation = useNavigation();
+  const backButton = require('../../../../../assets/back-button.png');
+  const defaultProfileImage = require('../../../../../assets/Profile-pick.png');
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    const getUserData = async () => {
+      const token = await AsyncStorage.getItem('token');
+      axios
+        .post('http://192.168.15.11:5001/userdata', { token: token })
+        .then(res => {
+          setUsername(res.data.data.username);
+          setEmail(res.data.data.email);
+          setTelephone(res.data.data.telephone);
+          setPassword(res.data.data.password);
+          if (res.data.data.profileImage) {
+            setProfileImage({ uri: `http://192.168.15.11:5001/${res.data.data.profileImage.replace(/\\/g, '/')}` });
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          Alert.alert('Erro', 'Ocorreu um erro ao obter dados do usuário. Tente novamente.');
+        });
+    };
+    getUserData();
+  }, []);
+
+  const handleSave = () => {
     if (password !== confirmPassword) {
       Alert.alert('Erro', 'As senhas não coincidem!');
       return;
     }
 
+    const token = AsyncStorage.getItem('token');
     const formData = new FormData();
     formData.append('username', username);
     formData.append('email', email);
@@ -57,24 +76,18 @@ export default function SignUpForm() {
     }
 
     axios
-      .post('http://192.168.15.11:5001/SignUpForm', formData, {
+      .post('http://192.168.15.11:5001/updateuser', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
       .then(res => {
-        if (res.data.status === "ok") {
-          setButtonText("Cadastro Efetuado!");
-          setTimeout(() => {
-            navigation.navigate('LoginForm');
-          }, 1000);
-        } else {
-          Alert.alert('Erro', 'Usuário já existente!');
-        }
+        Alert.alert('Sucesso', 'Dados atualizados com sucesso!');
+        navigation.goBack();
       })
       .catch(error => {
         console.error(error);
-        Alert.alert('Erro', 'Ocorreu um erro ao cadastrar. Tente novamente.');
+        Alert.alert('Erro', 'Ocorreu um erro ao atualizar os dados. Tente novamente.');
       });
   };
 
@@ -93,10 +106,6 @@ export default function SignUpForm() {
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
 
   return (
@@ -120,79 +129,62 @@ export default function SignUpForm() {
                 <Image source={defaultProfileImage} style={styles.profileImage} />
               )}
             </Pressable>
-            <View style={styles.inputViewCadastrar}>
+            <View style={styles.inputView}>
               <Text style={styles.inputLabel}>Usuário</Text>
               <TextInput
-                style={styles.inputCadastro}
-                placeholder='ex: joaozin123'
+                style={styles.input}
                 value={username}
                 onChangeText={setUsername}
-                autoCorrect={false}
-                autoCapitalize='none'
               />
+            </View>
+            <View style={styles.inputView}>
               <Text style={styles.inputLabel}>Email</Text>
               <TextInput
-                style={[styles.inputCadastro, emailBorderClass]}
-                placeholder='ex: joaozin@gmail.com'
+                style={styles.input}
                 value={email}
-                onChangeText={(text) => {
-                  setEmail(text);
-                  const hasError = !text.includes('@');
-                  setEmailBorderClass(hasError ? styles.inputError : '');
-                  setShowWarningIcon(hasError);
-                }}
-                autoCorrect={false}
-                autoCapitalize='none'
+                onChangeText={setEmail}
               />
-              {showWarningIcon && (
-                <Icon name="exclamation-circle" size={20} color="red" style={styles.warningIcon} />
-              )}
+            </View>
+            <View style={styles.inputView}>
               <Text style={styles.inputLabel}>Telefone</Text>
-              <TextInputMask
-                type={'cel-phone'}
-                options={{
-                  maskType: 'BRL',
-                  withDDD: true,
-                  dddMask: '(99)'
-                }}
-                style={styles.inputCadastro}
-                placeholder='ex: (48)91234-5678'
+              <TextInput
+                style={styles.input}
                 value={telephone}
                 onChangeText={setTelephone}
               />
+            </View>
+            <View style={styles.inputView}>
               <Text style={styles.inputLabel}>Senha</Text>
               <View style={styles.passwordContainer}>
                 <TextInput
-                  style={[styles.inputCadastro, { paddingRight: 45 }]}
-                  placeholder='********'
-                  secureTextEntry={isPasswordVisible}
+                  style={[styles.input, { paddingRight: 45 }]}
                   value={password}
                   onChangeText={setPassword}
-                  autoCorrect={false}
-                  autoCapitalize='none'
+                  secureTextEntry={isPasswordVisible}
+                  autoCapitalize="none"
                 />
                 <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
-                  <Icon name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} paddingRight/>
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.inputLabel}>Confirmar Senha</Text>
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  style={styles.inputCadastro}
-                  placeholder='********'
-                  secureTextEntry={isConfirmPasswordVisible}
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                  autoCorrect={false}
-                  autoCapitalize='none'
-                />
-                <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.iconContainer}>
-                  <Icon name={isConfirmPasswordVisible ? 'eye-slash' : 'eye'} size={20} />
+                  <Icon name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} />
                 </TouchableOpacity>
               </View>
             </View>
-            <Pressable style={styles.buttomCadastrar} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>{buttonText}</Text>
+            <View style={styles.inputView}>
+              <Text style={styles.inputLabel}>Confirmar Nova Senha</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={[styles.input, { paddingRight: 45 }]}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={isPasswordVisible}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
+                  <Icon name={isPasswordVisible ? 'eye-slash' : 'eye'} size={20} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <Pressable style={styles.buttomSave} onPress={handleSave}>
+              <Text style={styles.buttonText}>SALVAR</Text>
             </Pressable>
           </SafeAreaView>
         </ScrollView>
