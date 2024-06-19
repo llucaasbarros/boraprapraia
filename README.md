@@ -21,7 +21,7 @@ PORT = <Port number, default is 5001>
 
 To run the server, use the following command:
 ```
-npm start
+node app.js
 ```
 This will start the server on the specified port.
 
