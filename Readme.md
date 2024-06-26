@@ -1,6 +1,5 @@
 
 # Boraprapraia
-*ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤLOGINㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤHOME* 
 # ![image](https://github.com/llucaasbarros/boraprapraia/assets/129459925/04e3a8b7-660b-41ac-9123-d5ee4251e7f4) ![image](https://github.com/llucaasbarros/boraprapraia/assets/129459925/0eee9018-cb2c-4fcc-8cbb-63735294b4bb)
 
 
