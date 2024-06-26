@@ -1,6 +1,9 @@
--------------------
-Boraprapraia
--------------------
+
+# Boraprapraia
+# ![image](https://github.com/llucaasbarros/boraprapraia/assets/129459925/04e3a8b7-660b-41ac-9123-d5ee4251e7f4)
+
+
+
 🙁 _*Problema:*_
 
 Juan, um homem casado e pai de três filhos, recentemente se mudou para Florianópolis, uma cidade conhecida por suas belas praias. Animado com a ideia de aproveitar o fim de semana com a família, decidiu visitar a famosa Praia dos Ingleses.
