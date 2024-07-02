@@ -26,6 +26,7 @@ export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordBorderClass, setConfirmPasswordBorderClass] = useState(styles.inputCadastro);
   const backButton = require('../../../../../assets/back-button.png');
   const defaultProfileImage = require('../../../../../assets/Profile-pick.png');
   const navigation = useNavigation();
@@ -38,6 +39,7 @@ export default function SignUpForm() {
 
   const handleSubmit = () => {
     if (password !== confirmPassword) {
+      setConfirmPasswordBorderClass([styles.inputCadastro, styles.inputError]);
       Alert.alert('Erro', 'As senhas não coincidem!');
       return;
     }
@@ -101,14 +103,14 @@ export default function SignUpForm() {
 
   return (
     <LinearGradient
-      colors={['#e3d4ba', '#fff1e0']}
+      colors={['#ffd39e', '#e6d6be']}
       style={styles.container}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === "android" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : null}
         style={styles.container}
       >
-        <ScrollView style={styles.scrollView}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <SafeAreaView style={styles.container}>
             <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
               <Image source={backButton} style={styles.backButtonImage} />
@@ -178,11 +180,14 @@ export default function SignUpForm() {
               <Text style={styles.inputLabel}>Confirmar Senha</Text>
               <View style={styles.passwordContainer}>
                 <TextInput
-                  style={styles.inputCadastro}
+                  style={[confirmPasswordBorderClass, { paddingRight: 45 }]}
                   placeholder='********'
                   secureTextEntry={isConfirmPasswordVisible}
                   value={confirmPassword}
-                  onChangeText={setConfirmPassword}
+                  onChangeText={(text) => {
+                    setConfirmPassword(text);
+                    setConfirmPasswordBorderClass(password !== text ? [styles.inputCadastro, styles.inputError] : styles.inputCadastro);
+                  }}
                   autoCorrect={false}
                   autoCapitalize='none'
                 />

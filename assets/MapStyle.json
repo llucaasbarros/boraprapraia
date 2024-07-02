@@ -16,5 +16,14 @@
         "color": "#fff1e0"
       }
     ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
   }
 ]

@@ -1,21 +1,12 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  Fragment
-} from 'react';
-import {
-  View,
-  Dimensions,
-  Platform,
-  PermissionsAndroid
-} from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
+import { View, Dimensions, Platform, PermissionsAndroid } from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import styles from './HomeStyle';
 import { useNavigation } from '@react-navigation/native';
 import Geolocation from '@react-native-community/geolocation';
 import mapStyle from '../../../../../assets/MapStyle.json';
 import FabButton from '../../Components/FabButton';
+import MarkerBL from '../../Components/MarkerBL';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -35,6 +26,7 @@ const BOUNDARIES = {
 
 export default function Home() {
   const [region, setRegion] = useState(HOME_REGION);
+  const [zoom, setZoom] = useState(10); // Estado para armazenar o nível de zoom
   const mapRef = useRef(null);
   const navigation = useNavigation();
 
@@ -43,18 +35,29 @@ export default function Home() {
   }, []);
 
   function getMyLocation() {
-    Geolocation.getCurrentPosition(info => {
-      const { latitude, longitude } = info.coords;
-      if (isWithinBoundaries(latitude, longitude)) {
-        setRegion({
-          ...HOME_REGION,
-          latitude,
-          longitude
-        });
-      } else {
+    Geolocation.getCurrentPosition(
+      info => {
+        const { latitude, longitude } = info.coords;
+        if (isWithinBoundaries(latitude, longitude)) {
+          setRegion({
+            ...HOME_REGION,
+            latitude,
+            longitude
+          });
+        } else {
+          setRegion(HOME_REGION);
+        }
+      },
+      error => {
+        console.error(error);
         setRegion(HOME_REGION);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000
       }
-    });
+    );
   }
 
   function isWithinBoundaries(latitude, longitude) {
@@ -86,6 +89,11 @@ export default function Home() {
       setRegion(adjustedRegion);
       mapRef.current.animateToRegion(adjustedRegion, 1000);
     }
+
+    // Obtenha o nível de zoom atual
+    mapRef.current.getCamera().then(camera => {
+      setZoom(camera.zoom);
+    });
   }
 
   function navigateToConfig() {
@@ -115,7 +123,11 @@ export default function Home() {
             });
           }
         }}
-      />
+      >
+        <Marker coordinate={{ latitude: -27.573341, longitude: -48.425181 }}>
+          <MarkerBL zoom={zoom} title={"Barra da Lagoa"} description={"Praia"} />
+        </Marker>
+      </MapView>
       <Fragment>
         <FabButton navigateToConfig={navigateToConfig} />
       </Fragment>

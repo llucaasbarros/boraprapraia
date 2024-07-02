@@ -26,6 +26,8 @@ export default function EditProfile() {
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const navigation = useNavigation();
@@ -54,18 +56,20 @@ export default function EditProfile() {
     getUserData();
   }, []);
 
-  const handleSave = () => {
-    if (password !== confirmPassword) {
-      Alert.alert('Erro', 'As senhas não coincidem!');
+  const handleSave = async () => {
+    if (newPassword && newPassword !== confirmNewPassword) {
+      Alert.alert('Erro', 'As novas senhas não coincidem!');
       return;
     }
 
-    const token = AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem('token');
     const formData = new FormData();
     formData.append('username', username);
     formData.append('email', email);
     formData.append('telephone', telephone);
-    formData.append('password', password);
+    if (newPassword) {
+      formData.append('newPassword', newPassword);
+    }
 
     if (profileImage) {
       formData.append('profileImage', {
@@ -75,21 +79,21 @@ export default function EditProfile() {
       });
     }
 
-    axios
-      .post('http://192.168.15.11:5001/updateuser', formData, {
-        headers: {
+    axios.put('http://192.168.15.11:5001/Alterar', formData, {
+      headers: {
           'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(res => {
-        Alert.alert('Sucesso', 'Dados atualizados com sucesso!');
-        navigation.goBack();
-      })
-      .catch(error => {
-        console.error(error);
-        Alert.alert('Erro', 'Ocorreu um erro ao atualizar os dados. Tente novamente.');
-      });
-  };
+          'Authorization': `Bearer ${token}`
+      },
+  })
+  .then(res => {
+      Alert.alert('Sucesso', 'Dados atualizados com sucesso!');
+      navigation.goBack();
+  })
+  .catch(error => {
+      console.error(error);
+      Alert.alert('Erro', 'Ocorreu um erro ao atualizar os dados. Tente novamente.');
+  });
+};
 
   const handleChoosePhoto = () => {
     ImagePicker.launchImageLibrary({ noData: true }, (response) => {
@@ -110,7 +114,7 @@ export default function EditProfile() {
 
   return (
     <LinearGradient
-      colors={['#e3d4ba', '#fff1e0']}
+      colors={['#ffd39e', '#e6d6be']}
       style={styles.container}
     >
       <KeyboardAvoidingView
@@ -154,12 +158,26 @@ export default function EditProfile() {
               />
             </View>
             <View style={styles.inputView}>
-              <Text style={styles.inputLabel}>Senha</Text>
+              <Text style={styles.inputLabel}>Senha Atual</Text>
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={[styles.input, { paddingRight: 45 }]}
-                  value={password}
+                  value={"********"}
                   onChangeText={setPassword}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity style={styles.iconContainer}>
+                  <Icon name={'eye-slash'} size={20} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.inputView}>
+              <Text style={styles.inputLabel}>Nova Senha</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={[styles.input, { paddingRight: 45 }]}
+                  value={newPassword}
+                  onChangeText={setNewPassword}
                   secureTextEntry={isPasswordVisible}
                   autoCapitalize="none"
                 />
@@ -173,8 +191,8 @@ export default function EditProfile() {
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={[styles.input, { paddingRight: 45 }]}
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
+                  value={confirmNewPassword}
+                  onChangeText={setConfirmNewPassword}
                   secureTextEntry={isPasswordVisible}
                   autoCapitalize="none"
                 />

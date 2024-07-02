@@ -67,7 +67,7 @@ export default function Config() {
 
   return (
     <LinearGradient
-      colors={['#e3d4ba', '#fff1e0']}
+      colors={['#ffd39e', '#e6d6be']}
       style={styles.container}
     >
       <SafeAreaView style={{ flex: 1 }}>
