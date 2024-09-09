@@ -25,9 +25,11 @@ Aplicativo para achar de forma rápida e fácil a lotação de praias, facilitan
 
 🔗 _*url github:*_  
 https://github.com/llucaasbarros/BoraPraPraia
+
 https://github.com/LCFJunior/BoraPraPraia---EXPO-
 
 🛬 _*url landpage:*_
+
 https://github.com/llucaasbarros/boraprapraia/settings/pages
 
 🤝 _*url Modelo Negócio (imagem):*_
