@@ -19,7 +19,7 @@ Aplicativo para achar de forma rápida e fácil a lotação de praias, facilitan
 
 🧑‍💻👩‍💻 _*Equipe:*_ Lucas Pereira de Barros, Juan, Thiago, Luis Carlos Junior. 
 
-🛠️ _*Recursos/Tecnologias Utilizados:*_ HTML, CSS, GITHUB, JAVASCRIPT.
+🛠️ _*Recursos/Tecnologias Utilizados:*_ REACT native, node JS e MongoDB.
 -------------------
 💡 *PMI I*
 
