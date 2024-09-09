@@ -17,7 +17,7 @@ Toda e qualquer pessoa com dificulde e dúvida na questão da lotação das prai
 🎁 _*Proposta de Valor:*_: 
 Aplicativo para achar de forma rápida e fácil a lotação de praias, facilitando assim o dia de lazer de qualquer pessoa usuária.
 
-🧑‍💻👩‍💻 _*Equipe:*_ Lucas Pereira de Barros, Juan, Thiago, Luis Carlos Junior. 
+🧑‍💻👩‍💻 _*Equipe:*_ Lucas Pereira de Barros, Juan, Thiago, Luiz Carlos Francisco Junior. 
 
 🛠️ _*Recursos/Tecnologias Utilizados:*_ REACT native, node JS e MongoDB.
 -------------------
